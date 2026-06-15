@@ -1,1 +1,1 @@
-# godot-generic-2d-shooter-game-
+# godot-generic-bullet-hell-game-

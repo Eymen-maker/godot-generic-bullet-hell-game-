@@ -21,7 +21,6 @@ var shootwait_time = 0.1
 func _ready() -> void:
 	cooldown_timer.start()
 
-
 func _on_cooldown_timer_timeout() -> void:
 	shooting = 1
 	shooting_timer.start(shootingTime)
@@ -32,6 +31,11 @@ func _on_shooting_timer_timeout() -> void:
 
 func _on_shootwait_timer_timeout() -> void:
 	shoot_agan = 1
+
+func _on_area_2d_area_entered(area: Area2D) -> void:
+	if area.is_in_group("player_bullet"):
+		get_damaged(area)
+
 
 func _process(delta: float) -> void:
 	
@@ -62,19 +66,22 @@ func _process(delta: float) -> void:
 		
 	else:
 		animated_sprite_2d.play("idle")
-		
-	var local_char_name = get_name()
-	if local_char_name == Global.player_bullet_collider_name:
-		if Global.player_bullet_touching:
-			local_char_health -= 5
-			Global.player_bullet_touching = 0
-			var blood = BLOOD.instantiate()
-			place.add_child(blood)
-			blood.global_position = global_position
+
+
+
+
+func get_damaged(area):
+	if area.name == "player_bullet_area2d":
+		local_char_health -= Global.player_bullet_damage
+		Global.put_blood(place, BLOOD, global_position)
+		did_i_die(local_char_health)
 	
-	
-	if local_char_health <= 0:
+	elif area.name == "player_shotgun_pellet_area2d":
+		local_char_health -= Global.player_shotgun_pellet_damage
+		Global.put_blood(place, BLOOD, global_position)
+		did_i_die(local_char_health)
+
+
+func did_i_die(health):
+	if health <= 0:
 		queue_free()
-	
-	
-	

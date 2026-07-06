@@ -8,6 +8,7 @@ extends Node2D
 
 
 const PLAYER_BULLET = preload("uid://bcrm6jsd52xxb")
+const PLAYER_SHOTGUN_BULLET = preload("uid://cnvobn7qkm7p7")
 
 var shooting = 1
 var shotgun_shooting = 1
@@ -68,8 +69,16 @@ func _process(delta):
 				shooting = 0
 				pistol_shootwait_timer.start(Global.pistol_shootwait_time_custom)
 		
-		
+
 	elif current_gun == "shotgun":
 		if Input.is_action_just_pressed("m1"):
 			if shotgun_shooting == 1:
-				pass
+				randomize()
+				for i in range(Global.shotgun_pellet_amount_custom):
+					var shotgun_bullet = PLAYER_SHOTGUN_BULLET.instantiate()
+					place.add_child(shotgun_bullet)
+					shotgun_bullet.global_position = $Marker2D.global_position 
+					shotgun_bullet.global_rotation_degrees = $Marker2D.global_rotation_degrees + randi_range(-30, 30)
+				shotgun_shooting = 0
+				shotgun_shootwait_timer.start(Global.shotgun_shootwait_time_custom)
+				

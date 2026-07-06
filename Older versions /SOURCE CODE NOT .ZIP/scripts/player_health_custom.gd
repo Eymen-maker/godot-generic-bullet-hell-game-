@@ -10,4 +10,4 @@ func _on_text_submitted(new_text: String) -> void:
 		text = ""
 	elif output is int :
 		text = str(output)
-		Global.player_health_custom = output
+		Global.max_player_health_custom = output

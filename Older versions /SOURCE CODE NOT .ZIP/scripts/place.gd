@@ -1,5 +1,7 @@
 extends Node2D
 @onready var place: Node2D = $"."
+@onready var game: Node2D = $".."
+#@onready var character: CharacterBody2D = $"character"
 
 const RUNNING_ENEMY = preload("uid://737nfnejgfu3")
 const PAUSED = preload("uid://8nkievx3x6x3")
@@ -25,8 +27,8 @@ func _ready() -> void:
 	if Global.tutorial == true:
 		tutorial_level = 1
 		
-	var character = CHARACTER.instantiate()
-	place.add_child(character)
+	var character2 = CHARACTER.instantiate()
+	place.add_child(character2)
 	var player_health = PLAYER_HEALT.instantiate()
 	place.add_child(player_health)
 
@@ -58,14 +60,16 @@ func _process(_delta: float) -> void:
 				tutorial_level = 4
 				once = 1
 				Global.tutorial = false # update this when new tutorial level
+	
+	elif enemys_left() == 0:
 		
-	if enemys_left() == 0:
-		runner = 0
-		gunner = 0
-		sniper = 0
+		Global.current_player_health = Global.max_player_health_custom
 		Global.wave += 1
 		Global.wave_power = (Global.wave + 3) * 2 # VERY İMPORTANT, also linear <===============================
-		print(Global.wave_power)
+		print(Global.wave)
+		
+		
+		reset_enemies()
 		while Global.wave_power >= 5:
 			wave_enemy_calculator()
 		enemy_counts(runner,gunner,sniper)
@@ -73,17 +77,13 @@ func _process(_delta: float) -> void:
 		# can make a level chooser by using awards aka max level
 		
 
-	#if menu == false:
-	#	if Input.is_action_just_pressed("pause"):
-	#		var paused_menu = PAUSED.instantiate()
-	#		add_child(paused_menu)
-	#		menu = true
-	
-	#if menu == true :
-	#	if Input.is_action_just_pressed("pause"):
-	#		var paused_menu = PAUSED.instantiate()
-	#		add_child(paused_menu)
-	#		menu = false
+	if Global.menu_status == 0:
+		if Input.is_action_just_pressed("pause"):
+			var paused_menu = PAUSED.instantiate()
+			game.add_child(paused_menu)
+			Global.menu_status = 1
+			place.process_mode = Node.PROCESS_MODE_DISABLED
+
 
 func wave_enemy_calculator():
 	randomize()
@@ -103,7 +103,11 @@ func wave_enemy_calculator():
 			if randf() < 0.8 / (runner * 2):
 				Global.wave_power -= 2 + runner
 				runner += 1
-	
+
+func reset_enemies():
+		runner = 0 
+		gunner = 0
+		sniper = 0
 
 func enemy_counts (a, b, c):
 	

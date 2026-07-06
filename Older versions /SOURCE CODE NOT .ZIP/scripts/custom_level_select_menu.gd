@@ -10,22 +10,10 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("pause"):
 		#default values
-		Global.runner_enemy_count_custom = 1
-		Global.runner_enemy_speed_custom = 100
-		Global.gunner_enemy_count_custom = 2
-		Global.bullet_speed_custom = 100
-		Global.player_health_custom = 100
-		Global.player_speed_custom = 100
-		Global.sniper_charge_up_time_custom = 5 # in seconds
-		Global.sniper_cooldown_time_custom = 4
-		Global.sniper_enemy_count_custom = 0
-		
-		
-		
-		
+		Global.global_game_var_reset()
 		
 		var menu = MENU.instantiate()
 		game.add_child(menu)

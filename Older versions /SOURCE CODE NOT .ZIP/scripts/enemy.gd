@@ -22,10 +22,14 @@ func _on_hurt_timer_timeout() -> void:
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"): 
 		touching_player = 0
+
 func _on_area_2d_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player"): 
 		touching_player = 1
 
+func _on_area_2d_area_entered(area: Area2D) -> void:
+		if area.is_in_group("player_bullet"):
+			get_damaged(area)
 
 func _ready() -> void:
 	var deviation = 1000
@@ -35,9 +39,6 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	
-
-		
 	
 	
 	# for dir
@@ -53,22 +54,25 @@ func _process(delta: float) -> void:
 	# hurting the player
 	if touching_player == 0 :
 		if can_hurt == true:
-			Global.player_health_custom -= damage
+			Global.current_player_health -= damage
 			can_hurt = false
 			hurt_timer.start(hurt_time)
 	
-	var local_char_name = get_name()
-	if local_char_name == Global.player_bullet_collider_name:
-		if Global.player_bullet_touching:
-			local_char_health -= 5
-			Global.player_bullet_touching = 0
-			var blood = BLOOD.instantiate()
-			place.add_child(blood)
-			blood.global_position = global_position
-	
 	move_and_slide()
+
+
+func get_damaged(area):
+	if area.name == "player_bullet_area2d":
+		local_char_health -= Global.player_bullet_damage
+		Global.put_blood(place, BLOOD, global_position)
+		did_i_die(local_char_health)
 	
-	
-	
-	if local_char_health <= 0:
+	elif area.name == "player_shotgun_pellet_area2d":
+		local_char_health -= Global.player_shotgun_pellet_damage
+		Global.put_blood(place, BLOOD, global_position)
+		did_i_die(local_char_health)
+
+
+func did_i_die(health):
+	if health <= 0:
 		queue_free()

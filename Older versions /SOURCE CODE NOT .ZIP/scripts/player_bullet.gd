@@ -15,9 +15,7 @@ func _on_despawn_timer_timeout() -> void:
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body.is_in_group("enemies") :
-		Global.player_bullet_touching = 1
-		Global.player_bullet_collider_name = body.get_name()
+	if body.is_in_group("enemies"):
 		queue_free()
 	
 	

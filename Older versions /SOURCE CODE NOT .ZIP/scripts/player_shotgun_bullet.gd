@@ -1,11 +1,22 @@
 extends CharacterBody2D
+@onready var despawn_timer: Timer = $despawnTimer
 
+var SPEED = 600
+var pellet_despawn_time = 2
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	despawn_timer.start(pellet_despawn_time)
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	position += transform.x * SPEED * delta 
+
+
+
+func _on_player_shotgun_pellet_area_2d_body_entered(body: Node2D) -> void:
+	if body.is_in_group("enemies"):
+		queue_free()
+
+
+func _on_despawn_timer_timeout() -> void:
+	queue_free()

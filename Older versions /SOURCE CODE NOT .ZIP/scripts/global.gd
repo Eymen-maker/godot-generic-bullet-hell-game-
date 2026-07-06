@@ -3,19 +3,18 @@ extends Node2D
 var score = 0
 var you_lost = 0
 var player_bullet_touching = 0
-var player_bullet_collider_name 
-var wave_count = 0 
 var up_down 
 var left_right
 var player_direction
-
+# NOTE CHANGE ALL ADD ALL THE CHANGED VARS TO THE VAR RESET FUNC BELOW ==============================================
 # wave creation
 var wave_based_game_start # look
 var tutorial = false
 var custom_game_start = 0
 var wave_power = 0
 var wave = 0
-
+# menu 
+var menu_status = 0
 # default values for custom levels
 var runner_enemy_count_custom = 1
 var runner_enemy_speed_custom = 100
@@ -23,22 +22,24 @@ var runner_enemy_speed_custom = 100
 var gunner_enemy_count_custom = 2
 var bullet_speed_custom = 100
 
-var player_health_custom = 100
+var max_player_health_custom = 100
+var current_player_health = 100
 var player_speed_custom = 100
+
 var pistol_shootwait_time_custom = 0.1
+var player_bullet_damage = 5
+
 var shotgun_shootwait_time_custom = 1
+var shotgun_pellet_amount_custom = 4
+var player_shotgun_pellet_damage = 5
 
 var sniper_enemy_count_custom = 0
 var sniper_charge_up_time_custom = 5 # in seconds 
 var sniper_cooldown_time_custom = 4
+#NOTE CHANGE ALL ADD ALL THE CHANGED VARS TO THE VAR RESET FUNC BELOW ==============================================
 
 
-func _ready() -> void:
-	pass
-
-func _process(_delta: float) -> void:
-	pass
-
+# FUNC AREA ==================================================== FUNC AREA #
 func number_approver(wanted_number, max_char_limit):
 	if wanted_number == "0": 
 		return 0
@@ -50,7 +51,45 @@ func number_approver(wanted_number, max_char_limit):
 	else:
 		return wanted_number
 
-func wave_designer ():
-	if wave_based_game_start == true:
-		wave_power = wave_count * 2
-		sniper_enemy_count_custom = 100
+func put_blood(where, BLOOD, global_position2):
+	var blood = BLOOD.instantiate()
+	where.add_child(blood)
+	blood.global_position = global_position2
+
+func global_game_var_reset():
+	score = 0
+	you_lost = 0
+	player_bullet_touching = 0
+	up_down 
+	left_right
+	player_direction
+
+# wave creation
+	wave_based_game_start # look
+	tutorial = false
+	custom_game_start = 0
+	wave_power = 0
+	wave = 0
+# menu 
+	menu_status = 0
+# default values for custom levels
+	runner_enemy_count_custom = 1
+	runner_enemy_speed_custom = 100
+
+	gunner_enemy_count_custom = 2
+	bullet_speed_custom = 100
+
+	max_player_health_custom = 100
+	current_player_health = 100
+	player_speed_custom = 100
+
+	pistol_shootwait_time_custom = 0.1
+	player_bullet_damage = 5
+
+	shotgun_shootwait_time_custom = 1
+	shotgun_pellet_amount_custom = 4
+	player_shotgun_pellet_damage = 5
+
+	sniper_enemy_count_custom = 0
+	sniper_charge_up_time_custom = 5 # in seconds 
+	sniper_cooldown_time_custom = 4

@@ -5,7 +5,6 @@ extends CharacterBody2D
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var cooldown_timer: Timer = $cooldownTimer
 @onready var character: CharacterBody2D = $"../character"
-@onready var shootwait_timer: Timer = $shootwaitTimer
 @onready var marker_2d: Marker2D = $Marker2D
 @onready var place: Node2D = $".."
 
@@ -31,7 +30,9 @@ func _on_chargeup_timer_timeout() -> void:
 	cooldown_timer.start(cooldownTime)
 	warning_light = 0
 
-
+func _on_area_2d_area_entered(area: Area2D) -> void:
+	if area.is_in_group("player_bullet"):
+		get_damaged(area)
 
 
 func _process(delta: float) -> void:
@@ -69,15 +70,20 @@ func _process(delta: float) -> void:
 		chargeup_timer.start(Global.sniper_charge_up_time_custom)
 		charge_up_start = 0
 
-	var local_char_name = get_name()
-	if local_char_name == Global.player_bullet_collider_name:
-		if Global.player_bullet_touching:
-			local_char_health -= 5
-			Global.player_bullet_touching = 0
-			var blood = BLOOD.instantiate()
-			place.add_child(blood)
-			blood.global_position = global_position
+
+
+
+func get_damaged(area):
+	if area.name == "player_bullet_area2d":
+		local_char_health -= Global.player_bullet_damage
+		Global.put_blood(place, BLOOD, global_position)
+		did_i_die(local_char_health)
 	
-	
-	if local_char_health <= 0:
+	elif area.name == "player_shotgun_pellet_area2d":
+		local_char_health -= Global.player_shotgun_pellet_damage
+		Global.put_blood(place, BLOOD, global_position)
+		did_i_die(local_char_health)
+
+func did_i_die(health):
+	if health <= 0:
 		queue_free()

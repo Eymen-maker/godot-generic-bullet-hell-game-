@@ -23,5 +23,5 @@ func _process(delta: float) -> void:
 	move_and_slide()
 
 	if touching_body == true:
-		Global.player_health_custom -= damage
+		Global.current_player_health -= damage
 		queue_free()

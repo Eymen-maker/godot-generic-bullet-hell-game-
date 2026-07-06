@@ -40,3 +40,16 @@ func _shop_deactivated():
 	audio_stream_player_2.stream_paused = false
 	audio_stream_player.stream_paused = false
 	audio_stream_player_5.stop()
+
+func _stop_music():
+	audio_stream_player.stop()
+	audio_stream_player_2.stop()
+	audio_stream_player_3.stop()
+	audio_stream_player_4.stop()
+	audio_stream_player_5.stop()
+
+func _pause_fight_music():
+	audio_stream_player_2.stream_paused = true
+
+func _continue_fight_music():
+	audio_stream_player_2.stream_paused = false

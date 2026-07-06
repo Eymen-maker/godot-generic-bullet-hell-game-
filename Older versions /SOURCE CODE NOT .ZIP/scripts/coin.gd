@@ -14,7 +14,6 @@ func _ready() -> void:
 	randomize()
 	velocity_dir = Vector2(randf_range(-1, 1), randf_range(-1, 1))
 	speed = randi_range(1000,5000)
-	print(speed)
 
 func _process(delta: float) -> void:
 	speed = lerp(speed, 0.0 , 0.02)

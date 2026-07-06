@@ -36,7 +36,7 @@ func _ready() -> void:
 	var deviation = 1000
 	randomize()
 	speed = randi_range(speed * Global.runner_enemy_speed_custom + deviation, speed * Global.runner_enemy_speed_custom - deviation)
-	print(speed)
+	
 
 
 func _process(delta: float) -> void:
@@ -82,3 +82,17 @@ func get_damaged(area):
 		local_char_health -= Global.player_shotgun_pellet_damage
 		Global.put_blood(place, BLOOD, global_position)
 		#did_i_die(local_char_health)
+	
+	elif area.name == "ItemBombDamageArea":
+		local_char_health -= Global.item_bomb_damage
+		Global.put_blood(place, BLOOD, global_position)
+		Global.put_blood(place, BLOOD, global_position)
+		Global.put_blood(place, BLOOD, global_position)
+	
+	elif area.name == "EnemyBulletArea":
+		local_char_health -= Global.bullet_damage_custom
+		Global.put_blood(place, BLOOD, global_position)
+	
+	elif area.name == "SniperBulletArea":
+		local_char_health -= Global.sniper_bullet_damage
+		Global.put_blood(place, BLOOD, global_position)

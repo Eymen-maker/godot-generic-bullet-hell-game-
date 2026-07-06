@@ -9,7 +9,6 @@ var PLACE = load("uid://d4beggoh7cs8k")
 signal fight_music_start
 
 func _on_pressed() -> void:
-	print(music_tracker)
 	Global.wave_based_game_start = true
 	Global.runner_enemy_count_custom = 1
 	Global.gunner_enemy_count_custom = 2

@@ -9,5 +9,6 @@ func _on_text_submitted(new_text: String) -> void:
 		placeholder_text = output
 		text = ""
 	elif output is int :
+		Global.max_player_health_is_custom_made = output
 		text = str(output)
 		Global.max_player_health_custom = output

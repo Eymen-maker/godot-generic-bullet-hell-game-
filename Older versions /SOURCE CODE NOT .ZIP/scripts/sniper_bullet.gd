@@ -8,7 +8,6 @@ var SPEED = 3000
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player") : 
 		touching_body = true
-		#print("hit")
 
 
 func _ready() -> void:
@@ -25,3 +24,7 @@ func _process(delta: float) -> void:
 	if touching_body == true:
 		Global.current_player_health -= damage
 		queue_free()
+
+
+func _on_timer_timeout() -> void:
+	queue_free()

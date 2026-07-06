@@ -28,7 +28,7 @@ func _on_shotgun_shootwait_timer_timeout() -> void:
 func _ready() -> void:
 	shotgun.visible = 0
 
-func _process(delta):
+func _process(_delta):
 	var rotation_degrees2 = wrapf(rotation_degrees,0.0,360.0)
 
 	if rotation_degrees2 > 270:

@@ -1,5 +1,6 @@
 extends CharacterBody2D
 const BLOOD = preload("uid://tu05slnhq737")
+const COIN = preload("uid://dmf0fgxfh7iqg")
 
 
 @onready var place: Node2D = $".."
@@ -58,21 +59,26 @@ func _process(delta: float) -> void:
 			can_hurt = false
 			hurt_timer.start(hurt_time)
 	
+	# spawns coin
+	if local_char_health <= 0:
+		for i in range(1):
+			var coin = COIN.instantiate()
+			place.add_child(coin)
+			coin.player_picked_up_money.connect(character._on_money_picked)
+			coin.global_position = global_position
+		queue_free()
+	
 	move_and_slide()
+	
 
 
 func get_damaged(area):
 	if area.name == "player_bullet_area2d":
-		local_char_health -= Global.player_bullet_damage
+		local_char_health -= Global.player_pistol_bullet_damage
 		Global.put_blood(place, BLOOD, global_position)
-		did_i_die(local_char_health)
+		#did_i_die(local_char_health)
 	
 	elif area.name == "player_shotgun_pellet_area2d":
 		local_char_health -= Global.player_shotgun_pellet_damage
 		Global.put_blood(place, BLOOD, global_position)
-		did_i_die(local_char_health)
-
-
-func did_i_die(health):
-	if health <= 0:
-		queue_free()
+		#did_i_die(local_char_health)

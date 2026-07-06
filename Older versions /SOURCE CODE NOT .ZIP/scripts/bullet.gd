@@ -31,7 +31,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 	if touching_body == true:
-		Global.current_player_health -= 10
+		Global.current_player_health -= Global.bullet_damage_custom
 		queue_free()
 
 

@@ -8,10 +8,12 @@ extends CharacterBody2D
 @onready var marker_2d: Marker2D = $Marker2D
 @onready var place: Node2D = $".."
 
+const COIN = preload("uid://dmf0fgxfh7iqg")
 const BLOOD = preload("uid://tu05slnhq737")
 const SNIPER_LINE = preload("uid://mfmkwoffgvae")
 
-var cooldownTime = Global.sniper_cooldown_time_custom
+
+#var cooldownTime = Global.sniper_cooldown_time_custom
 @export var local_char_health = 50
 var charge_up_start = 0
 var shoot = 0
@@ -20,14 +22,14 @@ var warning_light = 0
 var where_player_will_be
 
 func _ready() -> void:
-	cooldown_timer.start(cooldownTime)
+	cooldown_timer.start(Global.sniper_cooldown_time_custom)
 
 func _on_cooldown_timer_timeout() -> void:
 	charge_up_start = 1
 
 
 func _on_chargeup_timer_timeout() -> void:
-	cooldown_timer.start(cooldownTime)
+	cooldown_timer.start(Global.sniper_cooldown_time_custom)
 	warning_light = 0
 
 func _on_area_2d_area_entered(area: Area2D) -> void:
@@ -35,7 +37,7 @@ func _on_area_2d_area_entered(area: Area2D) -> void:
 		get_damaged(area)
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if warning_light == 1:
 		if character:
 			look_at(where_player_will_be)
@@ -70,20 +72,23 @@ func _process(delta: float) -> void:
 		chargeup_timer.start(Global.sniper_charge_up_time_custom)
 		charge_up_start = 0
 
-
+	# spawns coin
+	if local_char_health <= 0:
+		for i in range(3):
+			var coin = COIN.instantiate()
+			place.add_child(coin)
+			coin.player_picked_up_money.connect(character._on_money_picked)
+			coin.global_position = global_position
+		queue_free()
 
 
 func get_damaged(area):
 	if area.name == "player_bullet_area2d":
-		local_char_health -= Global.player_bullet_damage
+		local_char_health -= Global.player_pistol_bullet_damage
 		Global.put_blood(place, BLOOD, global_position)
-		did_i_die(local_char_health)
+		#did_i_die(local_char_health)
 	
 	elif area.name == "player_shotgun_pellet_area2d":
 		local_char_health -= Global.player_shotgun_pellet_damage
 		Global.put_blood(place, BLOOD, global_position)
-		did_i_die(local_char_health)
-
-func did_i_die(health):
-	if health <= 0:
-		queue_free()
+		#did_i_die(local_char_health)

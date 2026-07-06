@@ -1,6 +1,7 @@
 extends Node2D
 @onready var place: Node2D = $"."
 @onready var game: Node2D = $".."
+@onready var music_tracker: Node2D = $"/root/musicTracker"
 #@onready var character: CharacterBody2D = $"character"
 
 const RUNNING_ENEMY = preload("uid://737nfnejgfu3")
@@ -9,6 +10,7 @@ const CHARACTER = preload("uid://cn1c6u6xra7ai")
 const GUNNER = preload("uid://by4ohy3k871gm")
 const PLAYER_HEALT = preload("uid://cliqckcq3pmf7")
 const SNIPER = preload("uid://c40r31hab7ib0")
+const SHOP = preload("uid://hijl7k27qmp")
 
 # wave_spawner is at the bottom
 
@@ -21,7 +23,7 @@ var once = 1
 var runner
 var gunner
 var sniper
-
+signal shop_active
 
 func _ready() -> void:
 	if Global.tutorial == true:
@@ -83,7 +85,17 @@ func _process(_delta: float) -> void:
 			game.add_child(paused_menu)
 			Global.menu_status = 1
 			place.process_mode = Node.PROCESS_MODE_DISABLED
-
+	
+	
+	# shop button is g
+	if Global.shop_status == 0:
+		if Input.is_action_just_pressed("shop"):
+			var shop = SHOP.instantiate()
+			game.add_child(shop)
+			Global.shop_status = 1
+			place.process_mode = Node.PROCESS_MODE_DISABLED
+			shop_active.connect(music_tracker._shop_active, CONNECT_ONE_SHOT)
+			shop_active.emit()
 
 func wave_enemy_calculator():
 	randomize()

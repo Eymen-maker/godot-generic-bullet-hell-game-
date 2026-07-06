@@ -2,7 +2,6 @@ extends CharacterBody2D
 
 
 const SPEED = 30000.0
-const JUMP_VELOCITY = -400.0
 var DASH = SPEED / 2
 
 
@@ -18,7 +17,7 @@ func _physics_process(delta: float) -> void:
 	velocity = direction * SPEED * delta
 	
 	if Input.is_action_just_pressed("dash"):
-		global_position = global_position + Vector2(left_right * DASH * delta ,up_down * DASH * delta)
+		global_position +=  Vector2(left_right * DASH * delta ,up_down * DASH * delta)
 
 	
 

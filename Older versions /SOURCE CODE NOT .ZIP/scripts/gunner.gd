@@ -13,7 +13,9 @@ var shooting = 0
 var shootingTime = 3
 var cooldownTime = 4
 var shoot_agan = 1
-var shootwait_time = 0.5
+var shootwait_time = 0.1
+#var gunner_health = 10
+var local_char_health = 10
 
 func _ready() -> void:
 	cooldown_timer.start()
@@ -63,7 +65,13 @@ func _process(delta: float) -> void:
 		
 	else:
 		animated_sprite_2d.play("idle")
-	
+		
+	var local_char_name = get_name()
+	if local_char_name == Global.player_bullet_collider_name:
+		if Global.player_bullet_touching:
+			local_char_health -= 5
+			Global.player_bullet_touching = 0
+			
 	
 	
 	#bullet.position = marker_2d.position

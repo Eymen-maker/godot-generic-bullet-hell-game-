@@ -1,12 +1,16 @@
 extends CharacterBody2D
 
 
-const SPEED = 20000.0
-var DASH = SPEED / 2
+var SPEED = 200.0 # 200.0 * global.player_speed_custom = 20000.0
+var DASH
+
+func _ready() -> void:
+	SPEED *= Global.player_speed_custom
+	DASH = SPEED / 2
+
 
 
 func _physics_process(delta: float) -> void:
-
 	var up_down := Input.get_axis("forward","backward")
 	var left_right := Input.get_axis("left","right")
 

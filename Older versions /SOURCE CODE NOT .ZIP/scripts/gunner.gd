@@ -2,11 +2,13 @@ extends StaticBody2D
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var cooldown_timer: Timer = $cooldownTimer
 @onready var shooting_timer: Timer = $shootingTimer
-@onready var character: CharacterBody2D = %CHARACTER
+@onready var character: CharacterBody2D = $"../character"
 @onready var shootwait_timer: Timer = $shootwaitTimer
 @onready var marker_2d: Marker2D = $Marker2D
 @onready var place: Node2D = $".."
 
+
+const BLOOD = preload("uid://tu05slnhq737")
 var BULLET = preload("uid://cwvi3v41nbfdd")
 
 var shooting = 0
@@ -14,8 +16,7 @@ var shootingTime = 3
 var cooldownTime = 4
 var shoot_agan = 1
 var shootwait_time = 0.1
-#var gunner_health = 10
-var local_char_health = 10
+@export var local_char_health = 70
 
 func _ready() -> void:
 	cooldown_timer.start()
@@ -50,7 +51,6 @@ func _process(delta: float) -> void:
 		animated_sprite_2d.flip_v = false
 		look_at(character.global_position)
 		
-	#print(rotation_degrees2)
 
 	if shooting == 1:
 		if shoot_agan == 1:
@@ -71,9 +71,13 @@ func _process(delta: float) -> void:
 		if Global.player_bullet_touching:
 			local_char_health -= 5
 			Global.player_bullet_touching = 0
-			
+			var blood = BLOOD.instantiate()
+			place.add_child(blood)
+			blood.global_position = global_position
 	
 	
-	#bullet.position = marker_2d.position
+	if local_char_health <= 0:
+		queue_free()
+	
 	
 	

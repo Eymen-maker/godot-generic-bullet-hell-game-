@@ -4,12 +4,12 @@ extends CharacterBody2D
 
 
 
-var SPEED = 300
+var SPEED = Global.bullet_speed_custom * 3
 var despawntime = 3
 var touching_body = false
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body.name == "CHARACTER": 
+	if body.name == "character": 
 		touching_body = true
 
 # un-needed rn # look up vro
@@ -31,7 +31,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 	if touching_body == true:
-		Global.player_healt -= 10
+		Global.player_health_custom -= 10
 		queue_free()
 
 

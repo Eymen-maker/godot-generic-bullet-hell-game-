@@ -9,7 +9,7 @@ var despawntime = 3
 var touching_body = false
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body.name == "character": 
+	if body.is_in_group("player") : 
 		touching_body = true
 
 # un-needed rn # look up vro

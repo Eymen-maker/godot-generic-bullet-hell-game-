@@ -1,44 +1,51 @@
-extends StaticBody2D
+extends CharacterBody2D
+
+
+@onready var chargeup_timer: Timer = $chargeupTimer
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var cooldown_timer: Timer = $cooldownTimer
-@onready var shooting_timer: Timer = $shootingTimer
 @onready var character: CharacterBody2D = $"../character"
 @onready var shootwait_timer: Timer = $shootwaitTimer
 @onready var marker_2d: Marker2D = $Marker2D
-@onready var place: Node2D = $".."
-
+#@onready var place: Node2D = $".."
 
 const BLOOD = preload("uid://tu05slnhq737")
-var BULLET = preload("uid://cwvi3v41nbfdd")
+const SNIPER_LINE = preload("uid://mfmkwoffgvae")
 
-var shooting = 0
-var shootingTime = 3
-var cooldownTime = 4
-var shoot_agan = 1
-var shootwait_time = 0.1
-@export var local_char_health = 70
+var cooldownTime = Global.sniper_cooldown_time_custom
+@export var local_char_health = 50
+var charge_up_start = 0
+var shoot = 0
+var warning_light = 0
+var distence:Vector2 
 
 func _ready() -> void:
-	cooldown_timer.start()
-
-
-func _on_cooldown_timer_timeout() -> void:
-	shooting = 1
-	shooting_timer.start(shootingTime)
-
-func _on_shooting_timer_timeout() -> void:
-	shooting = 0
 	cooldown_timer.start(cooldownTime)
 
-func _on_shootwait_timer_timeout() -> void:
-	shoot_agan = 1
+func _on_cooldown_timer_timeout() -> void:
+	charge_up_start = 1
+
+
+func _on_chargeup_timer_timeout() -> void:
+	cooldown_timer.start(cooldownTime)
+
+
+
 
 func _process(delta: float) -> void:
+	if warning_light == 1:
+		if character:
+			look_at(character.global_position + (Global.player_direction * distence))
+	else:
+		if character:
+			look_at(character.global_position)
+		
+		
+		
 	
 	# makes rot_degree restart at 360 to 0 
 	var rotation_degrees2 = wrapf(rotation_degrees,0.0,360.0)
-	if character:
-		look_at(character.global_position)
+
 	
 	# it works / flips char when needed
 	if rotation_degrees2 > 270:
@@ -49,32 +56,26 @@ func _process(delta: float) -> void:
 		animated_sprite_2d.flip_v = false
 
 
-	if shooting == 1:
-		if shoot_agan == 1:
-			animated_sprite_2d.play("shooting")
-			# makes the bullet spawn looking at the player (aka marker_2d)
-			var bullet = BULLET.instantiate()
-			place.add_child(bullet)
-			bullet.global_position = $Marker2D.global_position
-			bullet.global_rotation = $Marker2D.global_rotation
-			shootwait_timer.start(shootwait_time)
-			shoot_agan = 0
-		
-	else:
-		animated_sprite_2d.play("idle")
-		
+
+
+
+	if charge_up_start == 1:
+		var line = SNIPER_LINE.instantiate()
+		add_child(line)
+		line.global_position = $Marker2D.global_position
+		line.global_rotation = $Marker2D.global_rotation
+		chargeup_timer.start(Global.sniper_charge_up_time_custom)
+		charge_up_start = 0
+
 	var local_char_name = get_name()
 	if local_char_name == Global.player_bullet_collider_name:
 		if Global.player_bullet_touching:
 			local_char_health -= 5
 			Global.player_bullet_touching = 0
 			var blood = BLOOD.instantiate()
-			place.add_child(blood)
+			#place.add_child(blood)
 			blood.global_position = global_position
 	
 	
 	if local_char_health <= 0:
 		queue_free()
-	
-	
-	

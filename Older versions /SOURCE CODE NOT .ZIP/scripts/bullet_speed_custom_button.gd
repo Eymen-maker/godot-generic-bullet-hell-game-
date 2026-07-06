@@ -2,7 +2,7 @@ extends LineEdit
 
 
 
-var max_bullet_speed = 200
+var max_bullet_speed = 2000
 
 func _on_text_submitted(new_text: String) -> void:
 	var output = Global.number_approver(new_text, max_bullet_speed)

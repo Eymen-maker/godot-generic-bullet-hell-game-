@@ -7,7 +7,7 @@ extends CharacterBody2D
 @onready var character: CharacterBody2D = $"../character"
 @onready var shootwait_timer: Timer = $shootwaitTimer
 @onready var marker_2d: Marker2D = $Marker2D
-#@onready var place: Node2D = $".."
+@onready var place: Node2D = $".."
 
 const BLOOD = preload("uid://tu05slnhq737")
 const SNIPER_LINE = preload("uid://mfmkwoffgvae")
@@ -17,7 +17,8 @@ var cooldownTime = Global.sniper_cooldown_time_custom
 var charge_up_start = 0
 var shoot = 0
 var warning_light = 0
-var distence:Vector2 
+#for "aim_guessing" look at sniper_line scene
+var where_player_will_be
 
 func _ready() -> void:
 	cooldown_timer.start(cooldownTime)
@@ -28,6 +29,7 @@ func _on_cooldown_timer_timeout() -> void:
 
 func _on_chargeup_timer_timeout() -> void:
 	cooldown_timer.start(cooldownTime)
+	warning_light = 0
 
 
 
@@ -35,7 +37,7 @@ func _on_chargeup_timer_timeout() -> void:
 func _process(delta: float) -> void:
 	if warning_light == 1:
 		if character:
-			look_at(character.global_position + (Global.player_direction * distence))
+			look_at(where_player_will_be)
 	else:
 		if character:
 			look_at(character.global_position)
@@ -73,7 +75,7 @@ func _process(delta: float) -> void:
 			local_char_health -= 5
 			Global.player_bullet_touching = 0
 			var blood = BLOOD.instantiate()
-			#place.add_child(blood)
+			place.add_child(blood)
 			blood.global_position = global_position
 	
 	

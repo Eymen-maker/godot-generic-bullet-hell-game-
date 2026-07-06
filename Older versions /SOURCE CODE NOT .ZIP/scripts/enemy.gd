@@ -28,17 +28,26 @@ func _on_area_2d_body_exited(body: Node2D) -> void:
 
 
 func _ready() -> void:
-	speed *= Global.runner_enemy_speed_custom
+	var deviation = 1000
+	randomize()
+	speed = randi_range(speed * Global.runner_enemy_speed_custom + deviation, speed * Global.runner_enemy_speed_custom - deviation)
+	print(speed)
 
 
 func _process(delta: float) -> void:
+	
 
+		
+	
+	
 	# for dir
-	direction = character.global_position - global_position
-	direction = direction.normalized()
+	if character:
+		direction = character.global_position - global_position
+		direction = direction.normalized()
 
 	# for moving char
-	velocity = direction * speed * delta * touching_player
+	if character:
+		velocity = direction * speed * delta * touching_player
 
 
 	# hurting the player
@@ -57,9 +66,9 @@ func _process(delta: float) -> void:
 			place.add_child(blood)
 			blood.global_position = global_position
 	
-	
-	if local_char_health <= 0 :
-		queue_free()
-	
-	
 	move_and_slide()
+	
+	
+	
+	if local_char_health <= 0:
+		queue_free()

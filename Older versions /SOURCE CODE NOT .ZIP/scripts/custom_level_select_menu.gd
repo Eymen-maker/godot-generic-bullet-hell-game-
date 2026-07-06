@@ -19,9 +19,15 @@ func _process(delta: float) -> void:
 		Global.bullet_speed_custom = 100
 		Global.player_health_custom = 100
 		Global.player_speed_custom = 100
+		Global.sniper_charge_up_time_custom = 5 # in seconds
+		Global.sniper_cooldown_time_custom = 4
+		Global.sniper_enemy_count_custom = 0
+		
+		
+		
+		
 		
 		var menu = MENU.instantiate()
 		game.add_child(menu)
 		queue_free()
-		
 		

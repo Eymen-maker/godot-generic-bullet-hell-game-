@@ -2,13 +2,13 @@ extends CharacterBody2D
 
 var touching_body = false
 var SPEED = 3000
-var damage = 100
+@export var damage = 100
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player") : 
 		touching_body = true
-		print("hit")
+		#print("hit")
 
 
 func _ready() -> void:

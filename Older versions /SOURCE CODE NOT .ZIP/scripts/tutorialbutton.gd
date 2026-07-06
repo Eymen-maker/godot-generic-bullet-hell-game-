@@ -7,10 +7,11 @@ var PLACE = load("uid://d4beggoh7cs8k")
 
 
 func _on_pressed() -> void:
-	Global.wave_based_game_start = true
-	Global.runner_enemy_count_custom = 1
-	Global.gunner_enemy_count_custom = 2
-	Global.sniper_enemy_count_custom = 1
+	Global.tutorial = true
 	var start_game = PLACE.instantiate()
 	game.add_child(start_game)
+	Global.wave_based_game_start = true
+	Global.runner_enemy_count_custom = 1
+	Global.gunner_enemy_count_custom = 0
+	Global.sniper_enemy_count_custom = 0
 	menu.queue_free()
